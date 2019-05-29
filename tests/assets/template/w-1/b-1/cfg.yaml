@@ -1,0 +1,9 @@
+<type>: Composite
+<init>: true
+a:
+  <type>: Linear
+  <init>: true
+  w: 1
+  b: 1
+b:
+  <type>: Linear
