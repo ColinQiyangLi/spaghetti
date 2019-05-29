@@ -1,0 +1,9 @@
+<type>: MLP
+<init>: True
+units: [1, 5, 5, 1]
+activation:
+  <type>: ReLU
+  <init>: True
+linear_module:
+  <type>: Linear
+  bias: False    # switch off bias for all linear layers
