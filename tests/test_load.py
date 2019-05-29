@@ -1,6 +1,6 @@
-from spaghetti import load, register
+from spaghetti import load, quick_register
 
-@register
+@quick_register
 class Composite:
     def __init__(self, a, b):
         self.a = a
@@ -9,7 +9,7 @@ class Composite:
     def __call__(self, x):
         return self.b(self.a(x))
 
-@register
+@quick_register
 class Linear:
     def __init__(self, w, b):
         self.w = w

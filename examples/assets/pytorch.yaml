@@ -1,0 +1,19 @@
+<type>: Sequential
+<init>: True
+<list>:
+- <type>: Linear
+  <init>: True
+  in_features: 1
+  out_features: 32
+- <type>: relu
+  <init>: True
+- <type>: Linear
+  <init>: True
+  in_features: 32
+  out_features: 32
+- <type>: relu
+  <init>: True
+- <type>: Linear
+  <init>: True
+  in_features: 32
+  out_features: 1

@@ -46,7 +46,7 @@ def walk(s, choose_one=False):
 
 def expand(out_dir, template="template.yaml", pattern="cfg.yaml", verbose=False, remove_previous=True):
     with open(os.path.join(out_dir, template), "r") as f:
-        s = yaml.load(f)
+        s = yaml.load(f, Loader=yaml.FullLoader)
     if remove_previous:
         shutil.rmtree(out_dir)
         os.makedirs(out_dir)
