@@ -1,4 +1,4 @@
-from spaghetti import load, quick_register
+from spaghettini import load, quick_register
 
 @quick_register
 class Composite:

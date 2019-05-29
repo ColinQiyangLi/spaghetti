@@ -1,3 +1,5 @@
+__version__ = "0.0.1"
+
 import oyaml as yaml
 import types
 from .template import expand

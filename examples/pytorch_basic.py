@@ -1,6 +1,6 @@
 import torch.nn as nn
-import spaghetti
-from spaghetti import register, quick_register, load, check
+import spaghettini
+from spaghettini import register, quick_register, load, check
 
 quick_register(nn.Linear)
 register("relu")(nn.ReLU)
