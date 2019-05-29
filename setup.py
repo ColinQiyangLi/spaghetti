@@ -1,19 +1,21 @@
-from setuptools import setup, find_packages
-from codecs import open
-from os import path
-import os
+from setuptools import setup
 
-working_dir = path.abspath(path.dirname(__file__))
-ROOT = os.path.abspath(os.path.dirname(__file__))
-
-# Read the README.
-with open(os.path.join(ROOT, 'README.md'), encoding="utf-8") as f:
-    README = f.read()
-
-setup(name='spaghettini',
-      version='0.0.1',
-      description='',
-      long_description=README,
-      long_description_content_type='text/markdown',
-      install_requires=["oyaml"],
+setup(
+    name = 'spaghettini',
+    packages = ['spaghettini'],
+    version = '0.0.4',
+    description = 'A config manager that encourage people not to write spaghetti code',
+    author='Qiyang Li',
+    author_email='colin.qiyang.li@gmail.com',
+    url='https://github.com/ColinQiyangLi/spaghetti',
+    classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Operating System :: OS Independent',
+        'Development Status :: 1 - Planning',
+        'Environment :: Console',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: GIS'
+    ]
 )

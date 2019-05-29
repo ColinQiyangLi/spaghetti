@@ -1,3 +1,4 @@
+import spaghettini
 from spaghettini import load, quick_register
 
 @quick_register
