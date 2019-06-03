@@ -1,9 +1,11 @@
-<type>: MLP
-<init>: True
-units: [1, 5, 5, 1]
-activation:
+<type>: MLP          # module type
+<init>: True         # make sure it is initialized
+units: [1, 5, 5, 1]  # number of units in the mlp
+activation:          # activation module. The module is initialized
   <type>: ReLU
   <init>: True
-linear_module:
+linear_module:       # linear module. The module is not initialized, but have bias parameters given.
+                     # This will make sure when the program calls the linear module, all the bias
+                     # argument gets automatically passed in as False.
   <type>: Linear
   bias: False    # switch off bias for all linear layers

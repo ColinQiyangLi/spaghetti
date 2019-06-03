@@ -1,4 +1,4 @@
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 import oyaml as yaml
 import types
@@ -32,7 +32,7 @@ def register(name=None):
 def get(name):
     return MODULES[name]
 
-def configure(d):
+def configure(d, record_config=False):
     if type(d) == dict:
         assert "<type>" in d
         extra_kwargs = {k: configure(d[k]) for k in filter(lambda x: 
@@ -43,7 +43,10 @@ def configure(d):
         else:
             extra_args = []
         def core(*args, **kwargs):
-            return m(*args, *extra_args, **kwargs, **extra_kwargs)
+            v = m(*args, *extra_args, **kwargs, **extra_kwargs)
+            if record_config:
+                v.__config__ = d
+            return v
         if "<init>" in d and d["<init>"]:
             return core()
         return core
@@ -55,5 +58,5 @@ def load(path):
     if path.endswith("yaml"):
         with open(path, "r") as f:
             x = yaml.load(f, Loader=yaml.FullLoader)
-        return configure(x)
+        return configure(x, record_config=True)
     return None
