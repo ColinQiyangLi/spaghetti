@@ -1,4 +1,4 @@
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import oyaml as yaml
 import types
@@ -34,19 +34,30 @@ def get(name):
 
 def configure(d, record_config=False):
     if type(d) == dict:
-        assert "<type>" in d
-        extra_kwargs = {k: configure(d[k]) for k in filter(lambda x: 
-            (not x.endswith(">") and not x.startswith("<")), d)}
+        new_d = {}
+        for key, value in d.items():
+            if key.startswith("[") and key.endswith("]"):
+                for k, v in value.items():
+                    assert k not in new_d
+                    new_d[k] = v
+            else:
+                new_d[key] = value
+        d = new_d
+                
+        assert "<type>" in d, d
         m = get(d["<type>"])
-        if "<list>" in d:
-            extra_args = list(map(configure, d["<list>"]))
-        else:
-            extra_args = []
         def core(*args, **kwargs):
+            extra_kwargs = {k: configure(d[k]) for k in filter(lambda x: 
+                (not x.endswith(">") and not x.startswith("<")), d)}
+            if "<list>" in d:
+                extra_args = list(map(configure, d["<list>"]))
+            else:
+                extra_args = []
             v = m(*args, *extra_args, **kwargs, **extra_kwargs)
             if record_config:
                 v.__config__ = d
             return v
+
         if "<init>" in d and d["<init>"]:
             return core()
         return core

@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = 'spaghettini',
     packages = ['spaghettini'],
-    version = '0.0.5',
+    version = '0.0.6',
     description = 'A config manager that encourage people not to write spaghetti code',
     author='Qiyang Li',
     author_email='colin.qiyang.li@gmail.com',
