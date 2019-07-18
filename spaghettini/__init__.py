@@ -1,4 +1,4 @@
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 import oyaml as yaml
 import types
@@ -68,6 +68,6 @@ def configure(d, record_config=False):
 def load(path):
     if path.endswith("yaml"):
         with open(path, "r") as f:
-            x = yaml.load(f, Loader=yaml.FullLoader)
+            x = yaml.load(f)
         return configure(x, record_config=True)
     return None
