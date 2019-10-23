@@ -6,11 +6,13 @@ from .template import expand
 
 MODULES = {}
 
+
 def check():
     return {
         "num_modules": len(MODULES),
         "keys": list(MODULES)
     }
+
 
 def quick_register(module):
     name = module.__name__
@@ -18,19 +20,24 @@ def quick_register(module):
     MODULES[name] = module
     return module
 
+
 def register(name=None):
     assert name not in MODULES, "the module with {} is already registered".format(name)
     names = [name]
+
     def core(module):
         name = names[0]
         if name is None:
             name = module.__name__
         MODULES[name] = module
         return module
+
     return core
+
 
 def get(name):
     return MODULES[name]
+
 
 def configure(d, record_config=False):
     if type(d) == dict:
@@ -43,12 +50,13 @@ def configure(d, record_config=False):
             else:
                 new_d[key] = value
         d = new_d
-                
+
         assert "<type>" in d, d
         m = get(d["<type>"])
+
         def core(*args, **kwargs):
-            extra_kwargs = {k: configure(d[k]) for k in filter(lambda x: 
-                (not x.endswith(">") and not x.startswith("<")), d)}
+            extra_kwargs = {k: configure(d[k]) for k in filter(lambda x:
+                                                               (not x.endswith(">") and not x.startswith("<")), d)}
             if "<list>" in d:
                 extra_args = list(map(configure, d["<list>"]))
             else:
@@ -64,6 +72,7 @@ def configure(d, record_config=False):
     if type(d) == list:
         return list(map(configure, d))
     return d
+
 
 def load(path):
     if path.endswith("yaml"):

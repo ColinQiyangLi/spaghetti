@@ -44,6 +44,7 @@ def walk(s, choose_one=False):
                                                                 for key, pp in zip(keys, p))) for p in m]
     return res
 
+
 def expand(out_dir, template="template.yaml", pattern="cfg.yaml", verbose=False, remove_previous=True):
     with open(os.path.join(out_dir, template), "r") as f:
         s = yaml.load(f, Loader=yaml.FullLoader)
@@ -65,5 +66,3 @@ def expand(out_dir, template="template.yaml", pattern="cfg.yaml", verbose=False,
             yaml.dump(b, f)
     if verbose:
         print("Done.")
-
-
