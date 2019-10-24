@@ -1,6 +1,6 @@
 import torch.nn as nn
 import spaghettini
-from spaghettini import register, quick_register, load, check
+from spaghettini import register, quick_register, load, check, check_registered
 
 quick_register(nn.Linear)
 quick_register(nn.ReLU)
@@ -22,5 +22,7 @@ class MLP(nn.Module):
 
 
 print(check())
-net = load("assets/pytorch_mlp.yaml")
+check_registered()
+net = load("examples/assets/pytorch_mlp.yaml", verbose=True)
+print("Printing loaded network. ")
 print(net)

@@ -3,6 +3,8 @@ __version__ = "0.0.7"
 import oyaml as yaml
 import types
 from .template import expand
+import traceback
+from pprint import pprint
 
 MODULES = {}
 
@@ -14,15 +16,29 @@ def check():
     }
 
 
+def check_registered():
+    print("################################################################")
+    print("Printing registered modules: ")
+    for module_key, module in sorted(MODULES.items(), key=lambda kv: kv[0]):
+        print(f"{module_key:24}{module}")
+    print("################################################################")
+
+
 def quick_register(module):
     name = module.__name__
-    assert name not in MODULES, "the module with {} is already registered".format(name)
-    MODULES[name] = module
+    assert name not in MODULES, "The module with {} is already registered. ".format(name)
+    try:
+        MODULES[name] = module
+    except Exception as e:
+        print("Exception: \n{}".format(e))
+        print("Traceback: \n{}".format(traceback.print_exc()))
+        print("Message: Couldn't find module named {} to load".format(name))
+
     return module
 
 
 def register(name=None):
-    assert name not in MODULES, "the module with {} is already registered".format(name)
+    assert name not in MODULES, "The module with {} is already registered. ".format(name)
     names = [name]
 
     def core(module):
@@ -36,10 +52,14 @@ def register(name=None):
 
 
 def get(name):
-    return MODULES[name]
+    try:
+        return MODULES[name]
+    except Exception as e:
+        print("\nSpaghettini Message: Module '{}' not registered. \n".format(name))
+        raise
 
 
-def configure(d, record_config=False):
+def configure(d, record_config=False, verbose=False):
     if type(d) == dict:
         new_d = {}
         for key, value in d.items():
@@ -58,12 +78,21 @@ def configure(d, record_config=False):
             extra_kwargs = {k: configure(d[k]) for k in filter(lambda x:
                                                                (not x.endswith(">") and not x.startswith("<")), d)}
             if "<list>" in d:
-                extra_args = list(map(configure, d["<list>"]))
+                extra_args = tuple(map(configure, d["<list>"]))
             else:
-                extra_args = []
+                extra_args = tuple()
             v = m(*args, *extra_args, **kwargs, **extra_kwargs)
             if record_config:
                 v.__config__ = d
+            if verbose:
+                print(">>>>  Instantiating module: {}".format(m))
+                print("Arguments:")
+                for i, arg in enumerate(tuple(args + extra_args)):
+                    print("\tArgument {}: {}".format(i, arg))
+                print("Keyword arguments:")
+                for curr_key, curr_value in sorted(dict(**kwargs, **extra_kwargs).items(), key=lambda kv: kv[0]):
+                    print("\tKey: {}\n\t\t Value: {}".format(curr_key, curr_value))
+                print("<<<<")
             return v
 
         if "<init>" in d and d["<init>"]:
@@ -74,9 +103,11 @@ def configure(d, record_config=False):
     return d
 
 
-def load(path):
+def load(path, verbose=False):
     if path.endswith("yaml"):
         with open(path, "r") as f:
-            x = yaml.load(f)
-        return configure(x, record_config=True)
+            x = yaml.safe_load(f)
+        if verbose:
+            print(">>>>>>>>  Configuring from '{}'. ".format(path))
+        return configure(x, record_config=True, verbose=verbose)
     return None
