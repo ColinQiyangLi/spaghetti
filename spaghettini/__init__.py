@@ -5,6 +5,7 @@ import types
 from .template import expand
 import traceback
 from pprint import pprint
+import functools
 
 MODULES = {}
 
@@ -75,10 +76,11 @@ def configure(d, record_config=False, verbose=False):
         m = get(d["<type>"])
 
         def core(*args, **kwargs):
-            extra_kwargs = {k: configure(d[k]) for k in filter(lambda x:
+            configure_fn = functools.partial(configure, record_config=record_config, verbose=verbose)
+            extra_kwargs = {k: configure_fn(d[k]) for k in filter(lambda x:
                                                                (not x.endswith(">") and not x.startswith("<")), d)}
             if "<list>" in d:
-                extra_args = tuple(map(configure, d["<list>"]))
+                extra_args = tuple(map(configure_fn, d["<list>"]))
             else:
                 extra_args = tuple()
             v = m(*args, *extra_args, **kwargs, **extra_kwargs)
