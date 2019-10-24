@@ -6,6 +6,7 @@ from .template import expand
 import traceback
 from pprint import pprint
 import functools
+from reprlib import repr
 
 MODULES = {}
 
@@ -93,7 +94,7 @@ def configure(d, record_config=False, verbose=False):
                     print("\tArgument {}: {}".format(i, arg))
                 print("Keyword arguments:")
                 for curr_key, curr_value in sorted(dict(**kwargs, **extra_kwargs).items(), key=lambda kv: kv[0]):
-                    print("\tKey: {}\n\t\t Value: {}".format(curr_key, curr_value))
+                    print("\tKey: {}\n\t\t Value: {}".format(curr_key, repr(curr_value)))
                 print("<<<<")
             return v
 
