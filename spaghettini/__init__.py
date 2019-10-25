@@ -87,6 +87,7 @@ def configure(d, record_config=False, verbose=False):
             try:
                 v = m(*args, *extra_args, **kwargs, **extra_kwargs)
             except Exception as e:
+                print(e)
                 print("\nException occured while loading {}.\n".format(d["<type>"]))
                 raise
 
