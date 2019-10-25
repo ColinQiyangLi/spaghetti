@@ -87,9 +87,8 @@ def configure(d, record_config=False, verbose=False):
             try:
                 v = m(*args, *extra_args, **kwargs, **extra_kwargs)
             except Exception as e:
-                print(e)
-                print("Traceback: \n{}".format(traceback.print_exc()))
-                print("Exception occured while loading {}.".format(d["<type>"]))
+                print("\nException occured while loading {}.\n".format(d["<type>"]))
+                raise
 
             if record_config:
                 v.__config__ = d
