@@ -84,7 +84,13 @@ def configure(d, record_config=False, verbose=False):
                 extra_args = tuple(map(configure_fn, d["<list>"]))
             else:
                 extra_args = tuple()
-            v = m(*args, *extra_args, **kwargs, **extra_kwargs)
+            try:
+                v = m(*args, *extra_args, **kwargs, **extra_kwargs)
+            except Exception as e:
+                print(e)
+                print("Traceback: \n{}".format(traceback.print_exc()))
+                print("Exception occured while loading {}.".format(d["<type>"]))
+
             if record_config:
                 v.__config__ = d
             if verbose:
