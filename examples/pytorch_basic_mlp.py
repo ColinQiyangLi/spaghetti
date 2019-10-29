@@ -1,9 +1,10 @@
 import torch.nn as nn
 import spaghettini
-from spaghettini import register, quick_register, load, check
+from spaghettini import register, quick_register, load, check, check_registered
 
 quick_register(nn.Linear)
 quick_register(nn.ReLU)
+
 
 @quick_register
 class MLP(nn.Module):
@@ -15,10 +16,13 @@ class MLP(nn.Module):
                 model.append(activation)
             model.append(linear_module(in_units, out_units))
         self.model = nn.Sequential(*model)
-    
+
     def forward(self, x):
         return self.model(x)
 
+
 print(check())
-net = load("assets/pytorch_mlp.yaml")
+check_registered()
+net = load("examples/assets/pytorch_mlp.yaml", verbose=True)
+print("Printing loaded network. ")
 print(net)
